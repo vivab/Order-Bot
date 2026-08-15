@@ -6,7 +6,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import Message
 
 
-TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = "8943979043:AAFvMbx9sEki6SxNhmqzC3ImjuB1gEKPkws"
 
 if not TOKEN:
     raise RuntimeError("BOT_TOKEN не указан")
