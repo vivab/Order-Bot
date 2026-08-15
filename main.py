@@ -11,14 +11,12 @@ from app.handlers import orders
 async def main():
     print("🤖 Запуск P2P бота...")
 
-    # Создание таблиц БД
     await init_db()
 
-    print("🗄️ База данных готова")
+    print("🗄️ База данных подключена")
 
     try:
         await dp.start_polling(bot)
-
     finally:
         await bot.session.close()
 
