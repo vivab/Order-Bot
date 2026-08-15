@@ -1,3 +1,5 @@
+import os
+
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
@@ -6,7 +8,10 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.orm import DeclarativeBase
 
 
-DATABASE_URL = "sqlite+aiosqlite:///./p2p_bot.db"
+# Папка для постоянных данных BotHost
+os.makedirs("data", exist_ok=True)
+
+DATABASE_URL = "sqlite+aiosqlite:///./data/p2p_bot.db"
 
 
 class Base(DeclarativeBase):
