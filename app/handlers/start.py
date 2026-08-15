@@ -44,7 +44,7 @@ async def profile_handler(callback: CallbackQuery):
         "👤 <b>Профиль</b>\n\n"
         f"🆔 ID: <code>{user.id}</code>\n"
         f"👤 Username: {username}\n\n"
-        "📅 В боте с: будет добавлено после подключения БД\n"
+        "📅 В боте с: будет добавлено после БД\n"
         "👍 Положительных отзывов: 0\n"
         "👎 Отрицательных отзывов: 0\n"
         "💰 Оборот за 30 дней: 0\n"
@@ -60,7 +60,7 @@ async def profile_handler(callback: CallbackQuery):
 async def guarantors_handler(callback: CallbackQuery):
     await callback.message.edit_text(
         "🛡️ <b>Актуальные гаранты</b>\n\n"
-        "Список гарантов пока пуст.",
+        "Пока назначенных гарантов нет.",
         reply_markup=back_main(),
         parse_mode="HTML"
     )
