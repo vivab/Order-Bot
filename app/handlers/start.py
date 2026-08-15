@@ -1,68 +1,34 @@
 from aiogram import F
-from aiogram.filters import CommandStart
-from aiogram.types import Message, CallbackQuery
+from aiogram.filters import Command
+from aiogram.types import Message
 
 from app.bot import dp
-from app.keyboards import main_menu, back_main
+from app.database.repositories import get_or_create_user
+from app.keyboards import main_menu
 
 
-@dp.message(CommandStart())
+@dp.message(Command("start"))
 async def start_handler(message: Message):
+
+    user, is_new = await get_or_create_user(
+        telegram_id=message.from_user.id,
+        username=message.from_user.username,
+        first_name=message.from_user.first_name,
+    )
+
+    if is_new:
+        text = (
+            "👋 <b>Добро пожаловать!</b>\n\n"
+            "Вы успешно зарегистрированы."
+        )
+    else:
+        text = (
+            "👋 <b>С возвращением!</b>\n\n"
+            "Главное меню:"
+        )
+
     await message.answer(
-        "👋 <b>Добро пожаловать!</b>\n\n"
-        "Это P2P-маркет с системой гарантов "
-        "для безопасных сделок.\n\n"
-        "Выберите раздел:",
+        text,
         reply_markup=main_menu(),
-        parse_mode="HTML"
+        parse_mode="HTML",
     )
-
-
-@dp.callback_query(F.data == "menu:main")
-async def main_menu_handler(callback: CallbackQuery):
-    await callback.message.edit_text(
-        "🏠 <b>Главное меню</b>\n\n"
-        "Выберите раздел:",
-        reply_markup=main_menu(),
-        parse_mode="HTML"
-    )
-
-    await callback.answer()
-
-
-@dp.callback_query(F.data == "menu:profile")
-async def profile_handler(callback: CallbackQuery):
-    user = callback.from_user
-
-    username = (
-        f"@{user.username}"
-        if user.username
-        else "не указан"
-    )
-
-    await callback.message.edit_text(
-        "👤 <b>Профиль</b>\n\n"
-        f"🆔 ID: <code>{user.id}</code>\n"
-        f"👤 Username: {username}\n\n"
-        "📅 В боте с: будет добавлено после БД\n"
-        "👍 Положительных отзывов: 0\n"
-        "👎 Отрицательных отзывов: 0\n"
-        "💰 Оборот за 30 дней: 0\n"
-        "💰 Оборот за всё время: 0",
-        reply_markup=back_main(),
-        parse_mode="HTML"
-    )
-
-    await callback.answer()
-
-
-@dp.callback_query(F.data == "menu:guarantors")
-async def guarantors_handler(callback: CallbackQuery):
-    await callback.message.edit_text(
-        "🛡️ <b>Актуальные гаранты</b>\n\n"
-        "Пока назначенных гарантов нет.",
-        reply_markup=back_main(),
-        parse_mode="HTML"
-    )
-
-    await callback.answer()
